@@ -1,0 +1,3 @@
+foobar123	1	이것은 쪽지기능 테스트를 위한 쪽지입니다. ㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+foobar123	0	이것은 쪽지기능 테스트를 위한 쪽지입니다. ㅇㅇㅇㅇㅇㅇㅇㅇㅇ
+foobar123	0	this is a test this is a test123123

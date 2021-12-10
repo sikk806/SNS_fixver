@@ -1,0 +1,4 @@
+post_1	자유
+post_2	IT
+post_3	새내기
+post_4	졸업생
