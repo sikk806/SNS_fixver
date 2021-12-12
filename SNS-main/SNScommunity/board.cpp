@@ -415,63 +415,148 @@ void Board::changeCategoryName(string user_id) {
 	}
 
 	cout << "============================" << endl;
-	int selectCategory;
+	string selectCategory;
 	cout << endl;
 	cout << "변경할 카테고리를 선택해주세요.(최대 " << numline - 1 << "까지) : ";
 	cin >> selectCategory;
-	if (selectCategory < 1 && selectCategory > numline - 1) {
+	int check = -1;
+	if (selectCategory == "0" || selectCategory == "1" || selectCategory == "2" || selectCategory == "3" ||
+		selectCategory == "4" || selectCategory == "5" || selectCategory == "6" || selectCategory == "7" ||
+		selectCategory == "8" || selectCategory == "9") {
+		check = stoi(selectCategory);
+	}
+	if (check < 1 && check > numline - 1) {
 		cout << "잘못 입력하셨습니다." << endl;
 		Sleep(1000);
 		openpost.close();
 		changeCategoryName(user_id);
 	}
+	else if (selectCategory == "B" || selectCategory == "b") {
+		managerCategory(user_id);
+	}
 	else {
 		openpost.close();
-		changeName(user_id, selectCategory, nameOfCategory);
+		changeName(user_id, check, nameOfCategory, 1);
 	}
 }
 
-void Board::changeName(string user_id, int selectCategory, vector<string>& name) {
-	system("cls");
-	string _changeName;
-	cout << "============================" << endl;
-	cout << endl;
-	cout << "	변경할 이름을 입력해주세요." << endl;
-	cout << "	";
-	cin >> _changeName;
-	if (_changeName == "B" || _changeName == "b") {
-		managerCategory(user_id);
-	}
-	else if (_changeName.length() >= 2 && _changeName.length() <= 10) {
-		for (int i = 0; i < name.size(); i++) {
-			if (_changeName == name[i] && i != selectCategory - 1) {
-				cout << "중복되는 이름이 있습니다.";
-				changeName(user_id, selectCategory, name);
-			}
-			else {
-				string check;
-				cout << "변경하시겠습니까? (Y/y) or (N/n)";
-				cin >> check;
-				if (check == "Y" || check == "y") {
-					name[selectCategory - 1] = _changeName;
-					string filename = "./data/manager_category.txt";
-					ofstream openpost(filename);
-					vector<string> reset;
-					for (int i = 0; i < name.size(); i++) {
-						string resetName = "";
-						resetName += "post_";
-						resetName += to_string(i + 1);
-						resetName += "	";
-						resetName += name[i];
-						Sleep(1000);
-						openpost << resetName << endl;
+void Board::changeName(string user_id, int selectCategory, vector<string>& name, int check) {
+	if (check == 1) {
+		system("cls");
+		string _changeName;
+		cout << "============================" << endl;
+		cout << endl;
+		cout << "	변경할 이름을 입력해주세요." << endl;
+		cout << "	";
+		cin >> _changeName;
+		if (_changeName == "B" || _changeName == "b") {
+			managerCategory(user_id);
+		}
+		else if (_changeName.length() >= 2 && _changeName.length() <= 10) {
+			for (int i = 0; i < name.size(); i++) {
+				if (_changeName == name[i] && i != selectCategory - 1) {
+					cout << "중복되는 이름이 있습니다.";
+					Sleep(1000);
+					changeName(user_id, selectCategory, name, 1);
+				}
+				else {
+					string check;
+					cout << "변경하시겠습니까? (Y/y) or (N/n)";
+					cin >> check;
+					if (check == "Y" || check == "y") {
+						name[selectCategory - 1] = _changeName;
+						string filename = "./data/manager_category.txt";
+						ofstream openpost(filename);
+						vector<string> reset;
+						for (int i = 0; i < name.size(); i++) {
+							string resetName = "";
+							resetName += "post_";
+							resetName += to_string(i + 1);
+							resetName += "	";
+							resetName += name[i];
+							Sleep(1000);
+							openpost << resetName << endl;
 
+						}
+						cout << "변경하였습니다." << endl;
+						Sleep(1000);
+						managerCategory(user_id);
+						break;
 					}
-					cout << "변경하였습니다." << endl;
-					managerCategory(user_id);
-					break;
+					else if (check == "N" || check == "n") {
+						changeName(user_id, selectCategory, name, 1);
+					}
+					else {
+						cout << "잘못된 입력 입니다. 다시 입력해주세요." << endl;
+						Sleep(1000);
+						changeName(user_id, selectCategory, name, 1);
+					}
 				}
 			}
+		}
+		else {
+			cout << "이름은 2자 이상 10자 이하 입니다." << endl;
+			Sleep(1000);
+			changeName(user_id, selectCategory, name, 1);
+		}
+	}
+	else {
+		system("cls");
+		string _changeName;
+		cout << "============================" << endl;
+		cout << endl;
+		cout << "	변경할 이름을 입력해주세요." << endl;
+		cout << "	";
+		cin >> _changeName;
+		if (_changeName == "B" || _changeName == "b") {
+			managerCategory(user_id);
+		}
+		else if (_changeName.length() >= 2 && _changeName.length() <= 10) {
+			for (int i = 0; i < name.size(); i++) {
+				if (_changeName == name[i] && i != selectCategory - 1) {
+					cout << "중복되는 이름이 있습니다.";
+					Sleep(1000);
+					changeName(user_id, selectCategory, name, 2);
+				}
+				else {
+					string check;
+					cout << "변경하시겠습니까? (Y/y) or (N/n)";
+					cin >> check;
+					if (check == "Y" || check == "y") {
+						name[selectCategory - 1] = _changeName;
+						string filename = "./data/manager_category.txt";
+						ofstream openpost(filename);
+						vector<string> reset;
+						for (int i = 0; i < name.size(); i++) {
+							string resetName = "";
+							resetName += "post_";
+							resetName += to_string(i + 1);
+							resetName += "	";
+							resetName += name[i];
+							Sleep(1000);
+							openpost << resetName << endl;
+
+						}
+						cout << "변경하였습니다." << endl;
+						Sleep(1000);
+						managerCategory(user_id);
+						break;
+					}
+					else if (check == "N" || check == "n") {
+						changeName(user_id, selectCategory, name, 2);
+					}
+					else {
+						cout << "잘못된 입력 입니다. 다시 입력해주세요." << endl;
+						Sleep(1000);
+						changeName(user_id, selectCategory, name, 2);
+					}
+				}
+			}
+		}
+		else {
+			cout << "이름은 2자 이상 10자 이하 입니다." << endl;
+			Sleep(1000);
+			changeName(user_id, selectCategory, name, 1);
 		}
 	}
 }
@@ -511,12 +596,14 @@ void Board::addCategory(string user_id) {
 	}
 	else if (_newCategoryName.length() < 2 || _newCategoryName.length() > 10) {
 		cout << "카테고리 이름은 2자리에서 10자리 사이의 길이여야만 합니다." << endl;
+		Sleep(1000);
 		addCategory(user_id);
 	}
 	else {
 		for (int i = 0; i < nameOfCategory.size(); i++) {
 			if (_newCategoryName == nameOfCategory[i]) {
 				cout << "이미 존재하는 카테고리 이름입니다." << endl;
+				Sleep(1000);
 				addCategory(user_id);
 			}
 			else {
@@ -540,11 +627,13 @@ void Board::addCategory(string user_id) {
 					}
 
 					cout << "새로운 카테고리가 추가되었습니다." << endl;
+					Sleep(1000);
 					managerCategory(user_id);
 					break;
 				}
 				else {
 					cout << "취소하였습니다." << endl;
+					Sleep(1000);
 					managerCategory(user_id);
 					break;
 				}
@@ -580,15 +669,36 @@ void Board::mergeCategory(string user_id) {
 	}
 
 	cout << "============================" << endl;
-	int _merge1; // 병합할 폴더1
-	int _merge2; // 병합할 폴더2
+	string _m1;
+	string _m2;
+	int _merge1 = -1; // 병합할 폴더1
+	int _merge2 = -1; // 병합할 폴더2
 
 	cout << endl;
 	cout << "합칠 카테고리를 선택해주세요.(2개) : ";
-	cin >> _merge1;
-	cin >> _merge2;
+	cin >> _m1;
+	if (_m1 == "B" || _m1 == "b") {
+		managerCategory(user_id);
+		return;
+	}
+	cin >> _m2;
+	if (_m2 == "B" || _m2 == "b") {
+		managerCategory(user_id);
+		return;
+	}
 
-	if (_merge1 >= numline || _merge1 < 1 || _merge2 >= numline || _merge2 < 1) {
+	if (_m1 == "0" || _m1 == "1" || _m1 == "2" || _m1 == "3" ||
+		_m1 == "4" || _m1 == "5" || _m1 == "6" || _m1 == "7" ||
+		_m1 == "8" || _m1 == "9") {
+		_merge1 = stoi(_m1);
+	}
+	if (_m2 == "0" || _m2 == "1" || _m2 == "2" || _m2 == "3" ||
+		_m2 == "4" || _m2 == "5" || _m2 == "6" || _m2 == "7" ||
+		_m2 == "8" || _m2 == "9") {
+		_merge2 = stoi(_m2);
+	}
+
+	if (_merge1 >= numline || _merge1 < 1 && _merge2 >= numline || _merge2 < 1) {
 		cout << "잘못된 입력입니다." << endl;
 		Sleep(1000);
 		openpost.close();
@@ -596,14 +706,14 @@ void Board::mergeCategory(string user_id) {
 	}
 	else {
 		openpost.close();
-		mergingFolders(to_string(_merge1), to_string(_merge2));
+		mergingFolders(user_id, to_string(_merge1), to_string(_merge2));
 		cout << "카테고리 병합에 성공하였습니다." << endl;
 		Sleep(1000);
 		managerCategory(user_id);
 	}
 }
 
-void Board::mergingFolders(string _merge1, string _merge2) {
+void Board::mergingFolders(string user_id, string _merge1, string _merge2) {
 	if (stoi(_merge1) > stoi(_merge2)) {
 		string tmp = _merge1;
 		_merge1 = _merge2;
@@ -664,14 +774,12 @@ void Board::mergingFolders(string _merge1, string _merge2) {
 
 		if (comp_date1 < comp_date2) {
 			fs::path merge1_path = merge1_filename;
-			cout << merge1_path << endl;
 			fs::copy_file(merge1_path, _new_path);
 			
 			name_merge1++;
 		}
 		else {
 			fs::path _merge2_path = merge2_filename;
-			cout << _merge2_path << endl;
 			fs::copy_file(_merge2_path, _new_path);
 			
 			name_merge2++;
@@ -745,7 +853,6 @@ void Board::mergingFolders(string _merge1, string _merge2) {
 		cout << endl;
 	}
 
-	cout << nameOfCategory[1] << endl;
 	openfile.close();
 	ofstream writefile("./data/manager_category.txt");
 	for (int i = 1; i <= nameOfCategory.size(); i++) {
@@ -786,6 +893,29 @@ void Board::mergingFolders(string _merge1, string _merge2) {
 		mC_numFile--;
 	}
 
+	writefile.close();
+
+	string filename = "./data/manager_category.txt";
+	int n_line = lineFile(filename);
+	ifstream openpost(filename);
+	vector<string> n_OfCategory;
+	
+	for (int i = 1; i < n_line; i++) {
+		string line;
+		getline(openpost, line);
+		stringstream ss(line);
+
+		vector<string> data;
+
+		while (getline(ss, line, '	')) {
+			data.push_back(line);
+		}
+		n_OfCategory.push_back(data[1]);
+		cout << endl;
+	}
+
+	changeName(user_id, stoi(_merge1), n_OfCategory, 2);
+
 }
 
 void Board::deleteCategory(string user_id) {
@@ -795,7 +925,8 @@ void Board::deleteCategory(string user_id) {
 	int numline = lineFile(filename);
 	ifstream openpost(filename);
 	vector<string> nameOfCategory;
-	int _deleteCategoryNum;
+	string _delCatNum;
+	int _deleteCategoryNum = -1;
 
 	fs::path _delete_dir_path = "./data/post_";
 
@@ -828,7 +959,7 @@ void Board::deleteCategory(string user_id) {
 	cout << endl;
 	cout << " 입력 : ";
 	cout << endl;
-	while (!(cin >> _deleteCategoryNum)) {
+	/*while (!(cin >> _deleteCategoryNum)) {
 
 		cin.clear();
 
@@ -837,10 +968,19 @@ void Board::deleteCategory(string user_id) {
 		cout << "삭제할 게시판의 번호만 입력해주세요." << endl;
 
 		Sleep(1000);
+	}*/
+	cin >> _delCatNum;
+	if (_delCatNum == "0" || _delCatNum == "1" || _delCatNum == "2" || _delCatNum == "3" ||
+		_delCatNum == "4" || _delCatNum == "5" || _delCatNum == "6" || _delCatNum == "7" ||
+		_delCatNum == "8" || _delCatNum == "9") {
+		_deleteCategoryNum = stoi(_delCatNum);
 	}
-
-	if (_deleteCategoryNum < 1 || _deleteCategoryNum > nameOfCategory.size()) {
+	if (_delCatNum == "B" || _delCatNum == "b") {
+		managerCategory(user_id);
+	}
+	else if (_deleteCategoryNum < 1 || _deleteCategoryNum > nameOfCategory.size()) {
 		cout << "존재하지 않는 게시판입니다." << endl;
+		Sleep(1000);
 		deleteCategory(user_id);
 	}
 	else {
@@ -882,10 +1022,12 @@ void Board::deleteCategory(string user_id) {
 				openpost << resetname << endl;
 			}
 			cout << "게시판이 삭제되었습니다." << endl;
+			Sleep(1000);
 			managerCategory(user_id);
 		}
 		else if (check == "N" || check == "n") {
 			cout << "취소하였습니다." << endl;
+			Sleep(1000);
 			managerCategory(user_id);
 		}
 		else {

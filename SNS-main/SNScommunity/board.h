@@ -33,13 +33,13 @@ public:
 	void setColor(unsigned short text); // windows.h를 사용하는 함수 Mac에서 불가능할 경우 삭제.
 	void managerCategory(string user_id);
 	void changeCategoryName(string user_id);
-	void changeName(string user_id, int selectCategory, vector<string>& name);
+	void changeName(string user_id, int selectCategory, vector<string>& name, int check);
 	void addCategory(string user_id);
 	void mergeCategory(string user_id);
 	void deleteCategory(string user_id);
 	void change_Category(string _postname, string _userid);
 
-	void mergingFolders(string _merge1, string _merge2);
+	void mergingFolders(string user_id, string _merge1, string _merge2);
 	int lineFile(string _filename);
 	int numFile(string _category); // 폴더내 파일 갯수
 	bool checkWords(string _words); // 공백을 포함한 아라비아 숫자,한글과 영어로만 이루어진 문자열인지 여부를 검사
