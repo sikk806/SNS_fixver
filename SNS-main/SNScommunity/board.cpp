@@ -51,7 +51,11 @@ void Board::selectCategory(string _userid) {
 	cout << numline - 1 << ") : " << endl;
 	cin >> _select;
 
-	int sel = stoi(_select);
+	int sel = -1;
+	if (_select == "0" || _select == "1" || _select == "2" || _select == "3" || _select == "4" || _select == "5" || _select == "6" || _select == "7" ||
+		_select == "8" || _select == "9") {
+		sel = stoi(_select);
+	}
 	if(sel > 0 && sel < numline){
 	
 		string _category = "./data/post_";
