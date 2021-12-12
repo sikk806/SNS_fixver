@@ -111,14 +111,20 @@ void Board::mainPost(string _userid, string _category, int _getFile) {
 			ifstream openpost(_filename);
 
 			string line;
-			getline(openpost, line);
-			stringstream ss(line);
+			string re_line = "";
+			while (getline(openpost, line)) {
+				re_line += line;
+			}
+			stringstream ss(re_line);
 
 			vector<string> data;
-
-			while (getline(ss, line, '	')) {
-				data.push_back(line);
+			string push = "";
+			
+			int j = 0;
+			while (getline(ss, re_line, '\t')) {
+				data.push_back(re_line);
 			}
+
 			if (stoi(data[5]) > 10 && (stoi(data[6]) / stoi(data[5])) < 1) {
 				cout << i << ". " << "신고가 많은 글입니다." << endl;
 				cout << "	- 글을 보시려면 " << i << "번을 입력해주세요." << endl;
@@ -228,7 +234,10 @@ void Board::createPost(string _userid, string _category, int _postnum) {
 	string _currentnum = to_string(++_postnum);
 
 	vector<string> total;
+	vector<string> content_total;
+	vector<int> content_char_num_each;
 
+	cout << "=========================================" << endl;
 	cout << "제목 : ";
 	cin.ignore();
 	getline(cin, _title);
@@ -242,71 +251,118 @@ void Board::createPost(string _userid, string _category, int _postnum) {
 		createPost(_userid, _category, _befPostnum);
 	}
 	else {
-		cout << "=========================================";
+
 		cout << endl;
-		cout << "본문 : ";
-		getline(cin, _content);
-		if (_content == "B" || _content == "b") {
-			mainPost(_userid, _category, 0);
-			return;
-		}
-		else if (_content.size() < 2 || _content.size() > 300) {
-			cout << "본문의 길이는 2자 이상 300자 이하 입니다.";
-			Sleep(1000);
-			createPost(_userid, _category, _befPostnum);
-		}
-		else {
+		cout << "본문 : " << '\n' << endl;
 
-
-			_path += _category + "/" + _currentnum + ".txt";
-
-			ofstream savepost(_path);
-
-			if (savepost.is_open()) {
-				time_t rawtime;
-				tm* timeinfo;
-				char buffer[80];
-
-				time(&rawtime);
-				timeinfo = localtime(&rawtime);
-
-				strftime(buffer, 80, "%Y-%m-%d-%H-%M", timeinfo);
-				puts(buffer);
-
-				string _datetime(buffer);
-
-				// 파일 내용 작성 (파일번호/유저아이디/포매팅된날짜/제목/본문)
-				// 추천수나 신고수는 추후에 다른 함수에서 추가해주기
-				total.push_back(_currentnum);
-				total.push_back("	");
-				total.push_back(_userid);
-				total.push_back("	");
-				total.push_back(_datetime);
-				total.push_back("	");
-				total.push_back(_title);
-				total.push_back("	");
-				total.push_back(_content);
-				total.push_back("	0	0	");
+		while (1) {
+			getline(cin, _content);
+			if (_content == "") {
+				content_total.push_back("\n");
+			}
+			content_total.push_back(_content);
+			content_char_num_each.push_back(_content.size());
+			string _last_char;
+			if (_content == "") {
+				_last_char = "";
 			}
 			else {
-				cerr << "정보를 불러오는데에 실패하였습니다." << endl;
+				_last_char = _content.substr(_content.length() - 1, _content.length());
 			}
 
-			string _post = "";
-
-
-			for (int i = 0; i < total.size(); i++) {
-				_post += total[i];
+			//int _min_num = *min_element(content_char_num_each.begin(), content_char_num_each.end());
+			if (_last_char == "Y" || _last_char == "y") {
+				// 글 작성 성공!
+				//system("clear"); // Mac command
+				system("cls"); // Windows.h
+				cout << "게시글을 성공적으로 작성하였습니다." << endl;
+				Sleep(2000);
+				break;
 			}
-
-			savepost << _post;
-			savepost.close();
-
-
-			// 파일 작성이 끝나면 갱신된 파라미터로 다시 mainPost 함수 호출
-			mainPost(_userid, _category, _postnum);
+			else if (_last_char == "B" || _last_char == "b" || _last_char == "N" || _last_char == "n") {
+				//system("clear"); // Mac command
+				system("cls"); // Windows.h
+				cout << "글 작성을 취소합니다." << endl;
+				Sleep(2000);
+				mainPost(_userid, _category, 0);
+				return;
+			}
+			else {
+				for (int i = 0; i < content_total.size(); i++) {
+					if (content_total[i].size() < 2 || content_total[i].size() > 300) {
+						cout << "본문의 길이는 2자 이상 300자 이하 입니다.";
+						Sleep(1000);
+						createPost(_userid, _category, _befPostnum);
+					}
+					else {
+						continue;
+					}
+				}
+			}
 		}
+
+		/*for (int i = 0; i < content_total.size(); i++) {
+			cout << content_total[i] << endl;
+		}*/
+
+		Sleep(2000);
+
+		_path += _category + "/" + _currentnum + ".txt";
+
+		ofstream savepost(_path);
+
+		if (savepost.is_open()) {
+			time_t rawtime;
+			tm* timeinfo;
+			char buffer[80];
+
+			time(&rawtime);
+			timeinfo = localtime(&rawtime);
+
+			strftime(buffer, 80, "%Y-%m-%d-%H-%M", timeinfo);
+			puts(buffer);
+
+			string _datetime(buffer);
+
+			// 파일 내용 작성 (파일번호/유저아이디/포매팅된날짜/제목/본문)
+			// 추천수나 신고수는 추후에 다른 함수에서 추가해주기
+			total.push_back(_currentnum);
+			total.push_back("\t");
+			total.push_back(_userid);
+			total.push_back("\t");
+			total.push_back(_datetime);
+			total.push_back("\t");
+			total.push_back(_title);
+			total.push_back("\t");
+
+			for (int i = 0; i < content_total.size() - 1; i++) {
+
+				string new_content = content_total[i] + '\n';
+
+				total.push_back(new_content);
+			}
+
+			total.push_back("\t0\t0\t");
+		}
+		else {
+			cerr << "정보를 불러오는데에 실패하였습니다." << endl;
+		}
+
+		string _post = "";
+
+
+		for (int i = 0; i < total.size(); i++) {
+			_post += total[i];
+		}
+
+		savepost << _post;
+		savepost.close();
+
+
+		// 파일 작성이 끝나면 갱신된 파라미터로 다시 mainPost 함수 호출
+		mainPost(_userid, _category, _postnum);
 	}
+
 
 }
 
