@@ -19,6 +19,7 @@ void Login::main_promp() {
             Sleep(1000);
             break;
         }
+
         else if (cmd == 1) {
             std::string id_, pw_;
             // system("clear");  //    for mac command

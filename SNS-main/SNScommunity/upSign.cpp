@@ -141,9 +141,11 @@ bool SignUp::sign_up_main_() {
             return false;   //  만약 b/B 가 입력되면 false 로 return
     }
     // system("clear");
+
     system("cls");
     SignUp _user(_id, _pw);
     _user.sign_up_user_();
     std::cout << "회원가입 성공\n";
+    Sleep(1000);
     return true;        //  올바른 return
 }

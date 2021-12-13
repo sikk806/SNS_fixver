@@ -1,2 +1,4 @@
 manager	0	hhidijidjdi
 manager	0	1231456789123
+manager	0	안녕하세요.
+manager	0	\t
